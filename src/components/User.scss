@@ -1,0 +1,11 @@
+@import '../constants.scss';
+
+.User {
+    display: flex;
+    align-items: center;
+    font-family: $font-family-special;
+    color: $accentColor;
+    white-space: nowrap;
+    gap: 5px;
+    cursor: default;
+  }

@@ -1,0 +1,69 @@
+@import '../constants.scss';
+
+.Header-wrapper {
+    position: sticky;
+    z-index: 99;
+    background-color: rgba($white, .8);
+    backdrop-filter: blur(10px);
+    top: 0;
+    padding: 4px;
+    box-sizing: border-box;
+    border-bottom: 1px solid rgba($text-300, .2);
+    box-shadow: 0 5px 10px rgba($text-300, .1);
+}
+.Header {
+    position: relative;
+    align-self: flex-start;
+    padding: 0px !important;
+    border-radius: 10px;
+    box-sizing: border-box;
+
+    .navbar-nav {
+        gap: 10px;
+    }
+
+    .nav-link {
+        font-size: 14px;
+        font-family: $font-family-special;
+        color: $text-900;
+        padding: 8px 20px !important;
+        box-sizing: border-box;
+        border-radius: 30px;
+        white-space: nowrap;
+
+        &:hover {
+            color: $text-300;
+            background-color: rgba($text-300, .1);
+        }
+
+        &.active {
+            color: $text-300 !important;
+            background-color: rgba($text-300, .15);
+        }
+    }
+
+    .user-menu {
+        position: relative;
+        display: flex;
+        align-items: center;
+        margin-left: 15px;
+        gap: 10px;
+
+        .display-name {
+            font-family: $font-family-special;
+            color: $accentColor;
+            white-space: nowrap;
+        }
+
+        &:before {
+            content: '';
+            width: 4px;
+            height: 100%;
+            background-color: rgba($text-100, .4);
+            border-radius: 4px;
+            position: absolute;
+            left: -24px;
+            top: 0;
+        }
+    }
+}

@@ -1,0 +1,25 @@
+@import '../constants.scss';
+
+.Paginated-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    > .list-container {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        > .empty-list {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 50px;
+            box-sizing: border-box;
+            color: $text-100;
+            background-color: rgba($text-100, .1);
+            border-radius: 10px;
+            border: 1px solid rgba($text-100, .2);
+        }
+    }
+}

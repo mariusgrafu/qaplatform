@@ -1,0 +1,40 @@
+@import "../constants.scss";
+
+.Avatar {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: $font-family-special;
+  background-image: url("../assets/avatar-bg.png");
+  background-size: cover;
+  background-position: center;
+  color: $white;
+  border-radius: 20%;
+  flex-shrink: 0;
+
+  &:before {
+    content: "";
+    background-image: url("../assets/avatar-bg.png");
+    background-size: cover;
+    background-position: center;
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    border-radius: 20%;
+    z-index: -1;
+    pointer-events: none;
+    opacity: .5;
+    transition: .2s;
+  }
+
+}
+
+
+.blur-avt-trigger:hover > .Avatar {
+    
+    &:before {
+        transform: scale(1.1);
+        filter: blur(5px) saturate(150%);
+    }
+}

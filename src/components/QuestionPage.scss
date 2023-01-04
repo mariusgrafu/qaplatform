@@ -1,0 +1,51 @@
+@import "../constants.scss";
+
+.Question-page {
+  display: flex;
+  flex-direction: column;
+
+  > .header {
+    display: flex;
+    flex-direction: column;
+
+    > .title {
+      display: flex;
+      gap: 10px;
+
+      > h4 {
+        flex: 1;
+      }
+    }
+
+    .author-details {
+      display: flex;
+      align-items: center;
+      background-color: rgba($text-100, 0.2);
+      color: $text-300;
+      padding: 15px;
+      box-sizing: border-box;
+      border-radius: 6px;
+    }
+  }
+
+  .separator {
+    position: relative;
+    border-bottom: 2px solid lighten($text-100, 25%);
+    width: 100%;
+
+    &.with-tip {
+      &:before {
+        content: "";
+        width: 15px;
+        height: 15px;
+        position: absolute;
+        top: 0;
+        left: 18px;
+        transform: rotate(-45deg) translateY(-8px);
+        background-color: $white;
+        border: 2px solid;
+        border-color: lighten($text-100, 25%) lighten($text-100, 25%) transparent transparent;
+      }
+    }
+  }
+}
