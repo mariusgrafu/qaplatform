@@ -39,11 +39,30 @@ const addPointsToUser = async (userId, points) => {
   await user.save();
 };
 
+const getUserBadgeInfo = async (userId) => {
+  const user = await db.User.findOne({_id: userId}).exec();
+
+  if (!user) {
+    return {};
+  }
+
+  return {
+    points: user.points,
+    badge: user.badge,
+  };
+};
+
+const setUserBadge = async (userId, badgeId) => {
+  await db.User.updateOne({_id: userId}, {badge: badgeId}).exec();
+};
+
 const userController = {
   registerUser,
   verifyToken,
   getUserIdFromUid,
   addPointsToUser,
+  getUserBadgeInfo,
+  setUserBadge,
 
   POINTS_ANSWER,
   POINTS_BEST_ANSWER,

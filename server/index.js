@@ -165,10 +165,13 @@ app.post("/answer", authenticateToken, async (req, res) => {
   try {
     const { content, questionId } = req.body;
 
-    const { success, answerId, errors } = await answersController.addAnswer(req.userId, {
-      content,
-      questionId,
-    });
+    const { success, answerId, errors } = await answersController.addAnswer(
+      req.userId,
+      {
+        content,
+        questionId,
+      }
+    );
 
     res.send({ success, answerId, errors });
   } catch (err) {
@@ -198,7 +201,8 @@ app.post("/best-answer", authenticateToken, async (req, res) => {
     const { answerId, questionId } = req.body;
 
     await answersController.toggleBestAnswer(req.userId, {
-      answerId, questionId,
+      answerId,
+      questionId,
     });
 
     res.send({ success: true });
@@ -212,10 +216,13 @@ app.post("/suggestion", authenticateToken, async (req, res) => {
   try {
     const { content, answerId } = req.body;
 
-    const { success, errors } = await answersController.addSuggestion(req.userId, {
-      content,
-      answerId,
-    });
+    const { success, errors } = await answersController.addSuggestion(
+      req.userId,
+      {
+        content,
+        answerId,
+      }
+    );
 
     res.send({ success, errors });
   } catch (err) {
@@ -233,6 +240,39 @@ app.post("/accept-suggestion", authenticateToken, async (req, res) => {
     });
 
     res.send({ success: true });
+  } catch (err) {
+    console.warn(err);
+    res.send({ success: false });
+  }
+});
+
+app.get("/badges", async (req, res) => {
+  try {
+    const badges = await badgeController.getAllBadges();
+
+    res.send({ success: true, badges });
+  } catch (err) {
+    console.warn(err);
+    res.send({ success: false });
+  }
+});
+
+app.get("/user/badge-info", authenticateToken, async (req, res) => {
+  try {
+    const badgeInfo = await userController.getUserBadgeInfo(req.userId);
+
+    res.send({success: true, ...badgeInfo});
+  } catch (err) {
+    console.warn(err);
+    res.send({ success: false });
+  }
+});
+
+app.post("/user/set-badge", authenticateToken, async (req, res) => {
+  try {
+    await userController.setUserBadge(req.userId, req.body.badgeId);
+
+    res.send({success: true});
   } catch (err) {
     console.warn(err);
     res.send({ success: false });

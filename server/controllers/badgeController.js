@@ -64,7 +64,11 @@ const DEFAULT_BADGES = [
 ];
 
 const initBadges = async () => {
-  await db.Badge.collection.drop();
+  try {
+    await db.Badge.collection.drop();
+  } catch (err) {
+    console.warn(err);
+  }
 
   await Promise.all(
     DEFAULT_BADGES.map((badge) => {
@@ -78,6 +82,8 @@ const initBadges = async () => {
   );
 };
 
-const badgeController = { initBadges };
+const getAllBadges = () => db.Badge.find().sort("requiredPoints").exec();
+
+const badgeController = { initBadges, getAllBadges };
 
 module.exports = badgeController;

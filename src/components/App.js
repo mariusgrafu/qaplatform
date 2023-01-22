@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -14,6 +14,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import QuestionForm from "./QuestionForm";
 import QuestionPage from "./QuestionPage";
 import Footer from "./Footer";
+import MyBadges from "./MyBadges";
 
 function App() {
   const { currentUser } = useAuth();
@@ -46,6 +47,14 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+        path="/badges"
+        element={
+          <ProtectedRoute>
+            <MyBadges />
+          </ProtectedRoute>
+        }
+      />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
       <Footer />

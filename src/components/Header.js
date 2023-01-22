@@ -44,7 +44,7 @@ export default function Header() {
     }
 
     return (
-      <LinkContainer to="/me/badges">
+      <LinkContainer to="/badges">
         <Nav.Link>My badges</Nav.Link>
       </LinkContainer>
     );
