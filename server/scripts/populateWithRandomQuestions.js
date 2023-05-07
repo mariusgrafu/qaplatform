@@ -10,6 +10,7 @@ const hipsumDescription = `I'm baby dIY umami messenger bag, yr banjo flannel ma
 Meggings waistcoat vinyl mumblecore typewriter. Shaman affogato poutine, letterpress selfies vape irony big mood four dollar toast hella. Etsy man braid trust fund bitters. Messenger bag art party hammock hashtag hexagon pop-up praxis church-key hella. Kogi fingerstache photo booth yes plz lyft. Trust fund pork belly mlkshk ascot dreamcatcher chartreuse prism activated charcoal tonx aesthetic artisan neutra austin adaptogen paleo.`;
 const QUESTIONS_PER_USER = 10;
 let userIds = [];
+let categoryIds = [];
 
 const addUsers = async () => {
     await db.User.collection.drop();
@@ -36,9 +37,15 @@ const getUsers = async () => {
     userIds = users.map(user => user._id);
 }
 
+const getCategories = async () => {
+    const categories = await db.Category.find({}).exec();
+
+    categoryIds = categories.map(user => user._id);
+}
+
 const addQuestions = async () => {
     // await Promise.all([addUsers(), db.Question.collection.drop()]);
-    await Promise.all([getUsers(), db.Question.collection.drop()]);
+    await Promise.all([getUsers(), getCategories(), db.Question.collection.drop()]);
 
     await Promise.all(userIds.map((userId, userIndex) => {
 
@@ -49,12 +56,28 @@ const addQuestions = async () => {
             newQuestion.title = `Question Title ${userIndex}-${questionIndex}`;
             newQuestion.description = hipsumDescription;
             newQuestion.date = new Date(Date.now() - (userIndex + 1) * (questionIndex * 1) * 60000 * 60);
+            newQuestion.category = categoryIds[Math.floor(Math.random() * categoryIds.length)];
 
             return newQuestion.save();
         });
     }).flat());
 }
 
+const categories = "Math, Computer Science, Phisics, Work, School, Lifestyle, Health, Hobbies, Sport, Technology, Engineering".split(", ");
+
+const addCategories = async () => {
+    await Promise.all(categories.map((catName) => {
+        const newCategory = new db.Category();
+        newCategory.name = catName;
+
+        return newCategory.save();
+    }))
+}
+
 addQuestions().then(() => {
     process.exit();
 });
+
+// addCategories().then(() => {
+//     process.exit();
+// });

@@ -6,6 +6,7 @@ const getQuestions = async ({
   sortOption,
   currentPage,
   pageSize,
+  selectedCategory,
 }) => {
   const options = {};
   const scoreOptions = {};
@@ -17,6 +18,9 @@ const getQuestions = async ({
   if (searchText) {
     options["$text"] = { $search: searchText };
     scoreOptions["score"] = { $meta: "textScore" };
+  }
+  if (selectedCategory) {
+    options.category = selectedCategory;
   }
   switch (sortOption) {
     case "newest-first":
@@ -32,7 +36,7 @@ const getQuestions = async ({
   }
 
   const questions = await db.Question.find(options, { ...scoreOptions })
-    .populate("author")
+    .populate(["author", "category"])
     .sort(sortOptions)
     .skip(currentPage * pageSize)
     .limit(pageSize)
@@ -45,7 +49,7 @@ const getQuestions = async ({
 
 const getQuestionById = async (questionId) => {
   const question = await db.Question.findById(questionId)
-    .populate("author")
+    .populate(["author", "category"])
     .exec();
 
   return question;

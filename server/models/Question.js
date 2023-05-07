@@ -31,6 +31,11 @@ const QuestionSchema = new Schema({
             message: () => `The description must have at least ${DESCRIPTION_MIN_CHAR} characters and maximum ${DESCRIPTION_MAX_CHAR}.`
         }
     },
+    category: {
+        type: ObjectId,
+        requried: true,
+        ref: 'Category',
+    },
     plainTextDescription: {
         type: String,
     },

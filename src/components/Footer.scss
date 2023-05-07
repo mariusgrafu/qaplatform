@@ -22,5 +22,10 @@
         flex-direction: column;
         align-items: flex-end;
     }
+
+    .footer-row {
+      justify-content: space-between;
+      width: 100%;
+    }
   }
 }

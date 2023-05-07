@@ -65,6 +65,10 @@ const DEFAULT_BADGES = [
 
 const initBadges = async () => {
   try {
+    const count = await db.Badge.count().exec();
+    if (count === DEFAULT_BADGES.length) {
+      return;
+    }
     await db.Badge.collection.drop();
   } catch (err) {
     console.warn(err);

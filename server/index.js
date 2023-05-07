@@ -8,6 +8,7 @@ const userController = require("./controllers/userController");
 const questionsController = require("./controllers/questionsController");
 const answersController = require("./controllers/answersController");
 const badgeController = require("./controllers/badgeController");
+const categoriesController = require("./controllers/categoriesController");
 
 app.use(cors());
 app.use(express.json());
@@ -69,7 +70,7 @@ app.post("/register", async (req, res) => {
 
 app.get("/questions", async (req, res) => {
   try {
-    const { searchText, unansweredOnly, sortOption, currentPage, pageSize } =
+    const { searchText, unansweredOnly, sortOption, currentPage, pageSize, selectedCategory } =
       req.query;
 
     const { questions, questionsCount } =
@@ -79,6 +80,7 @@ app.get("/questions", async (req, res) => {
         sortOption,
         currentPage: +currentPage,
         pageSize: +pageSize,
+        selectedCategory,
       });
 
     res.send({
@@ -88,7 +90,21 @@ app.get("/questions", async (req, res) => {
     });
   } catch (err) {
     console.warn(err);
-    return { success: false };
+    res.send({ success: false });
+  }
+});
+
+app.get("/categories", async (req, res) => {
+  try {
+    const categories = await categoriesController.getCategories();
+
+    res.send({
+      success: true,
+      categories,
+    });
+  } catch (err) {
+    console.warn(err);
+    res.send({ success: false });
   }
 });
 
@@ -261,7 +277,7 @@ app.get("/user/badge-info", authenticateToken, async (req, res) => {
   try {
     const badgeInfo = await userController.getUserBadgeInfo(req.userId);
 
-    res.send({success: true, ...badgeInfo});
+    res.send({ success: true, ...badgeInfo });
   } catch (err) {
     console.warn(err);
     res.send({ success: false });
@@ -272,7 +288,7 @@ app.post("/user/set-badge", authenticateToken, async (req, res) => {
   try {
     await userController.setUserBadge(req.userId, req.body.badgeId);
 
-    res.send({success: true});
+    res.send({ success: true });
   } catch (err) {
     console.warn(err);
     res.send({ success: false });

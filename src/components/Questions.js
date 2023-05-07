@@ -1,8 +1,8 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Button, Col, Container, Form, InputGroup, Row } from "react-bootstrap";
+import { Badge, Button, Col, Container, Form, InputGroup, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import TimeAgo from 'react-timeago';
+import TimeAgo from "react-timeago";
 import slugify from "slugify";
 
 import { API_URL } from "../constants";
@@ -24,6 +24,7 @@ const PAGE_SIZE = 10;
 
 export default function Questions() {
   const [questions, setQuestions] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [lastPage, setLastPage] = useState(1);
   const [loading, setLoading] = useState(true);
 
@@ -31,6 +32,18 @@ export default function Questions() {
   const [searchText, setSearchText] = useState("");
   const [unansweredOnly, setUnansweredOnly] = useState(true);
   const [sortOption, setSortOption] = useState(sortOptions[0].value);
+  const [selectedCategory, setSelectedCategory] = useState('');
+
+  useEffect(() => {
+    axios.get(`${API_URL}/categories`).then(({ data }) => {
+      setCategories(
+        data.categories.map((c) => ({
+          key: c._id,
+          value: c.name,
+        }))
+      );
+    });
+  });
 
   useEffect(() => {
     axios
@@ -38,6 +51,7 @@ export default function Questions() {
         params: {
           searchText,
           unansweredOnly,
+          selectedCategory,
           sortOption,
           currentPage,
           pageSize: PAGE_SIZE,
@@ -50,11 +64,16 @@ export default function Questions() {
           setLoading(false);
         }
       });
-  }, [currentPage, searchText, unansweredOnly, sortOption]);
+  }, [currentPage, selectedCategory, searchText, unansweredOnly, sortOption]);
 
   const onSortOptionChange = (event) => {
     setSortOption(event.target.value);
   };
+
+  const onCategoryChange = (event) => {
+    setSelectedCategory(event.target.value);
+    setCurrentPage(0);
+  }
 
   const onUnansweredOnlyChange = (event) => {
     setUnansweredOnly(event.target.checked);
@@ -94,9 +113,26 @@ export default function Questions() {
                 aria-label="Search..."
                 name="search"
               />
-              <Button type="submit" variant="outline-primary">Search</Button>
+              <Button type="submit" variant="outline-primary">
+                Search
+              </Button>
             </InputGroup>
           </Form>
+        </Col>
+        <Col className="d-flex align-items-center mb-3" md="3" sm="4">
+          <InputGroup className="d-flex align-items-center">
+            <InputGroup.Text className="text-nowrap">Category</InputGroup.Text>
+            <Form.Select value={selectedCategory} onChange={onCategoryChange}>
+              <option value={""} key={"default"}>
+                All categories
+              </option>
+              {categories.map((cat) => (
+                <option value={cat.key} key={cat.key}>
+                  {cat.value}
+                </option>
+              ))}
+            </Form.Select>
+          </InputGroup>
         </Col>
         <Col className="d-flex align-items-center mb-3" md="3" sm="4">
           <InputGroup className="d-flex align-items-center">
@@ -117,7 +153,8 @@ export default function Questions() {
             label="Only unanswered"
             checked={unansweredOnly}
             onChange={onUnansweredOnlyChange}
-            className="d-flex align-items-center" style={{gap: '10px'}}
+            className="d-flex align-items-center"
+            style={{ gap: "10px" }}
           />
         </Col>
       </Row>
@@ -136,13 +173,22 @@ export default function Questions() {
 }
 
 export function QuestionItem({ question }) {
-  return <div className="Question-item">
-    <Link to={`/question/${question._id}`} className="title mb-2">
-    <h5>{question.isAnswered ? (<BestAnswerIcon className="me-2" />) : null}{question.title}</h5>
-    </Link>
-    <div className="description mb-3">{question.plainTextDescription}</div>
-    <div className="author-section">
-      Asked by&nbsp;<User user={question.author} />,&nbsp;<TimeAgo date={question.date} />
+  return (
+    <div className="Question-item">
+      <Link to={`/question/${question._id}`} className="title mb-2">
+        <h5>
+          {question.isAnswered ? <BestAnswerIcon className="me-2" /> : null}
+          {question.title}
+        </h5>
+      </Link>
+      <Badge className="align-self-start mb-3">{question.category.name}</Badge>
+      <div className="description mb-3">{question.plainTextDescription}</div>
+      <div className="author-section">
+        Asked by&nbsp;
+        <User user={question.author} />
+        ,&nbsp;
+        <TimeAgo date={question.date} />
+      </div>
     </div>
-  </div>;
+  );
 }

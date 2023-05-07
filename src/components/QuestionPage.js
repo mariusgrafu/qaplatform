@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useCallback, useEffect, useState } from "react";
-import { Button, Container } from "react-bootstrap";
+import { Badge, Button, Container } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { API_URL } from "../constants";
@@ -51,6 +51,7 @@ export default function QuestionPage() {
         <h4 className="special-text">{question.title}</h4>
         {getEditBtn()}
         </div>
+      <Badge className="align-self-start mb-3">{question.category.name}</Badge>
         <div className="author-details">
           Asked by&nbsp;
           <User user={question.author} />

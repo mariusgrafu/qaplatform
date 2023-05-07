@@ -3,6 +3,7 @@ const Question = require("./Question");
 const Answer = require("./Answer");
 const Suggestion = require("./Suggestion");
 const Badge = require("./Badge");
+const Category = require("./Category");
 
 const mapErrors = (errors) => {
   const errMap = {};
@@ -19,6 +20,7 @@ module.exports = {
   Answer,
   Suggestion,
   Badge,
+  Category,
 
   mapErrors,
 };
