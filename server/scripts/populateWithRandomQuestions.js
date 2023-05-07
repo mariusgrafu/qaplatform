@@ -63,9 +63,11 @@ const addQuestions = async () => {
     }).flat());
 }
 
-const categories = "Math, Computer Science, Phisics, Work, School, Lifestyle, Health, Hobbies, Sport, Technology, Engineering".split(", ");
+const categories = "Math, Computer Science, Phisics, Work, School, Lifestyle, Health, Hobbies, Sport, Technology, Engineering, Photography, Art, Travel, Cooking".split(", ");
 
 const addCategories = async () => {
+    await db.Category.collection.drop();
+
     await Promise.all(categories.map((catName) => {
         const newCategory = new db.Category();
         newCategory.name = catName;
